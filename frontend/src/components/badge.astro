@@ -1,0 +1,23 @@
+---
+const {name} = Astro.props
+const renderedTag = `#${name}`
+---
+
+<div class="tag">
+    {renderedTag}
+</div>
+
+<style>
+    .tag{
+        display: inline-block;
+        margin-right: .5rem;
+        border: 1px solid var(--accent-color);
+        border-radius: 2rem;
+        padding: 0.2rem 0.7rem;
+        letter-spacing: 1px;
+
+        &:hover{
+            background-color: var(--accent-color);
+        }
+    }
+</style>

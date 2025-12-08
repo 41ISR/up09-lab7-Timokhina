@@ -1,0 +1,87 @@
+---
+import badge from './badge.astro';
+
+
+    interface Props{
+  img: string;
+  img_alt: string;
+  href: string;
+  post_cl: string;
+  tags: string[];
+}
+
+const {
+    img = "/default.webp",
+    img_alt = "default_alt",
+    href = "",
+    post_cl = "",
+    tags = [],
+} = Astro.props;
+---
+
+<div id="card-img-right" class={post_cl}>
+    <a href={href}>
+        
+        <div class="txt">
+            <span class="date"><slot name="date">01-01-2000</slot></span>
+            <h3><slot name="header">Default header</slot></h3> 
+            <p><slot name="text">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</slot></p>
+            <div class="tags">
+                {tags.map((tag) => <badge name={tag} />)}
+            </div>
+            
+        </div>
+        <div class="img">
+            <img src={img} alt={img_alt} loading="lazy">
+        </div>
+    </a>
+</div>
+
+<style>
+    #card-img-right{
+        width: 100%;
+        height: 100%;
+        background-color: var(--bg-color);
+        
+
+        font-size: 0.8rem;
+
+        & > a{
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(2,1fr) ;
+            gap: 1rem;
+        }
+        
+        .img{
+            height: 100%;
+            overflow: hidden;
+            img{
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .txt{
+            h3{
+                font-size: 1.5rem;
+                margin: 0.9rem 0 .5rem;
+            }
+
+            .date{
+                color: var(--txt-sub-color);
+            }
+
+            .tags{
+                margin-top: 0.5rem;
+            }
+        }
+
+        &:hover{
+            transform: scale(1.02);
+        }
+
+    }
+
+</style>

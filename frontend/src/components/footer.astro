@@ -1,0 +1,80 @@
+
+<div id="footer">
+    <div class="footer">
+        <div class="logo">
+            <a href="/"><i class="bi bi-music-note-list"></i>MusicOn</a> — музыка для души.
+        </div>
+        
+        <div class="nav">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/blog">Блог</a></li>
+                <li><a href="/about">О нас</a></li>
+            </ul>
+        </div>
+
+        
+    </div>
+
+    <div class="copy">
+        <p><i class="bi bi-c-square"></i> MusicOn 2025. Все права защищены.</p>
+    </div>
+</div>
+
+<style>
+    #footer{
+        background-color: var(--bg-sub-color);
+        padding: 15px 0 0;
+    }
+
+    .footer{
+        width: 55vw;
+        margin: auto;
+
+        .logo{
+            
+            a{
+                font-size: 1.3rem;
+                color: var(--accent-color);
+                &:hover{
+                    color: var(--primary-color);
+                }
+            }
+            i{
+                font-size: 1.7rem;
+            }
+        }
+
+        .nav{
+            width: 20%;
+            border-top: 1px solid var(--txt-sub-color);
+            padding: 10px 0;
+            margin: 10px 0;
+        }
+
+        ul{
+            margin-left: 2rem;
+            list-style-type: "– " ;
+
+            line-height: 2;
+
+            a{
+                padding: 3px;
+
+                &:hover{
+                    color: var(--primary-color);
+                }
+            }
+        }
+
+        
+    }
+
+    .copy{
+        background-color: var(--bg-sub-color);
+        padding: 3px 0 2px;
+        color: var(--txt-sub-color);
+        
+        p{text-align: center;}
+    }
+</style>
