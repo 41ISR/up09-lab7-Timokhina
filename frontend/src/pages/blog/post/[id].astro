@@ -1,0 +1,151 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import type { Article } from "../../../content/article";
+
+
+export async function getStaticPaths() {
+  const res = await fetch("http://127.0.0.1:8000/api/articles/");
+  const articles: Article[] = await res.json();
+
+  return articles.map((article) => ({
+    params: { id: String(article.id) },
+  }));
+}
+
+
+const { id } = Astro.params;
+const res = await fetch(`http://127.0.0.1:8000/api/articles/${id}/`);
+const article: Article = await res.json();
+const backendBase = "https://expert-acorn-wrg65gxq5grwc9rrq-8000.app.github.dev";
+const imgUrl = article.image
+  .replace("http://localhost:8000", backendBase)
+  .replace("http://127.0.0.1:8000", backendBase);
+
+const tags = article.tags
+  ? article.tags.split(",").map((t: string) => t.trim()).filter(Boolean)
+  : [];
+---
+
+<Layout title={article.title}>
+  <article class="post container">
+    <h1 class="post-title">{article.title}</h1>
+    <p class="post-desc">{article.desc}</p>
+    {tags.length > 0 && (
+        <div class="post-tags">
+            {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+        ))}
+    </div>
+)}
+    <div class="post-image">           
+        <img src={imgUrl} alt={article.title} />
+    </div>
+    <div class="post-content" set:html={article.content}></div>
+  </article>
+</Layout>
+
+<style>
+  .container {
+    width: min(760px, 100% - 3rem);
+    margin: 3rem auto 4rem;
+  }
+
+  .post {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .post-title {
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .post-desc {
+    font-size: 1rem;
+    color: rgba(148, 163, 184, 0.9);
+    max-width: 40rem;
+  }
+  .post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: rgba(191, 219, 254, 0.95);
+  background: rgba(15, 23, 42, 0.9);
+    }
+
+
+  .post-image {
+  border-radius: 1.25rem;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  max-height: 480px;
+}
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+  max-height: 480px;
+  object-fit: cover;    /* обрезаем, не растягивая */
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.post-image img:hover {
+  transform: scale(1.03);
+}
+
+
+
+  .post-content {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(209, 213, 219, 0.95);
+  }
+
+  /* если article.content — HTML, можно повесить класс на div */
+  .post-content h2,
+  .post-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .post-content p {
+    margin-bottom: 0.9rem;
+  }
+
+  .post-content ul,
+  .post-content ol {
+    padding-left: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      width: min(100% - 2rem, 720px);
+      margin-top: 2rem;
+    }
+
+    .post-title {
+      font-size: 1.9rem;
+    }
+  .post-image {
+    max-height: 360px;
+  }
+  .post-image img {
+    max-height: 360px;
+  }
+}
+
+</style>
+

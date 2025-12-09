@@ -10,49 +10,53 @@
 </div>
 
 <style>
-    #nav{
-        width: 100%;
-        background-color: var(--bg-sub-color);
-        padding: 5px 0;
+  #nav {
+    width: 100%;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    background: #050816;
+  }
+
+  #nav nav {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+  }
+
+  #nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center; /* центрируем всю навигацию */
+    gap: 2rem;
+  }
+
+  #nav li.logo {
+    margin-right: auto; /* логотип слева, пункты меню по центру относительно контейнера */
+  }
+
+  #nav a {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  #nav a:hover {
+    color: #a855f7;
+  }
+
+  @media (max-width: 768px) {
+    #nav ul {
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    nav{
-        
-        width: 55vw;
-        margin: auto;
-        ul{
-            list-style: none;
-        }
-
-        li{
-            display: inline-block;
-            margin-right: 3rem;
-        }
-
-        a{
-            color: inherit;
-            vertical-align: middle;
-            padding: 3px;
-
-            &:hover{
-                color: var(--primary-color);
-            }
-        }
-
-        .logo{
-            font-size: 1.5rem;
-            margin-right: 7rem;
-            color: var(--accent-color);
-
-            a:hover{
-                color: var(--primary-color);
-            }
-        }
-
-        i{
-            font-size: 1.9rem;
-        }
+    #nav li.logo {
+      margin-right: 0;
+      flex-basis: 100%;
     }
-
-    
+  }
 </style>

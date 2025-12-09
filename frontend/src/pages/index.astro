@@ -1,7 +1,96 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/card.astro";
+import type { Article } from "../content/article";
+
+const res = await fetch("http://127.0.0.1:8000/api/articles/");
+const articles: Article[] = await res.json();
+
+const recent = articles.slice(0, 3);
+const others = articles.slice(3);
 ---
 
-<Layout>
-	
+<Layout title="MusicOn — блог">
+  <section class="hero">
+    <h1>THE BLOG</h1>
+    <p>Тут не про музыку, к сожалению, но тоже вроде прикольно...НУ ЛАДНО ОДИН ПОСТ ЕСТЬ</p>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2>Recent blog posts</h2>
+    </div>
+    <div class="grid grid--recent">
+      {recent.map((article) => <Card article={article} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2>All blog posts</h2>
+    </div>
+    <div class="grid grid--all">
+      {others.map((article) => <Card article={article} />)}
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .hero {
+    margin-bottom: 3rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 8vw, 5.5rem);
+    letter-spacing: 0.12em;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .hero p {
+    margin-top: 1rem;
+    max-width: 30rem;
+    color: rgba(249, 250, 251, 0.6);
+  }
+
+  .section {
+    margin-top: 3rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  /* верхние крупные карточки: 3 в ряд */
+  .grid--recent {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  /* нижняя сетка: помельче, плотнее */
+  .grid--all {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  @media (max-width: 768px) {
+    .page-container {
+      width: min(100% - 2rem, 720px);
+    }
+
+    .grid--recent,
+    .grid--all {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

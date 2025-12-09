@@ -1,0 +1,101 @@
+---
+const { article } = Astro.props;
+const backendBase = "https://expert-acorn-wrg65gxq5grwc9rrq-8000.app.github.dev";
+const imgUrl = article.image
+  .replace("http://localhost:8000", backendBase)
+  .replace("http://127.0.0.1:8000", backendBase);
+
+const publishDate = new Date(article.created_at).toLocaleDateString("ru-RU", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+
+const tags = article.tags
+  ? article.tags.split(",").map((t: string) => t.trim()).filter(Boolean)
+  : [];
+---
+
+<article class="card">
+  <a href={`/blog/post/${article.id}`} class="card-link">
+    <div class="card-image-wrap">
+      <img class="card-image" src={imgUrl} alt={article.title} />
+    </div>
+    <div class="card-body">
+      <p class="card-meta">{publishDate}</p>
+      <h3>{article.title}</h3>
+      <p>{article.desc}</p>
+      <div class="card-tags">
+    {tags.map((tag:any) => (
+      <span class="tag">{tag}</span>
+    ))}
+</div>
+
+    </div>
+  </a>
+</article>
+
+<style>
+  .card {
+    background: #0b1020;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card-image-wrap {
+    position: relative;
+    width: 100%;
+    /* фиксируем соотношение сторон — адаптивный контейнер */
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;         /* заполняем блок без искажений */
+    display: block;
+    transition: transform 0.25s ease;
+  }
+
+  .card:hover .card-image {
+    transform: scale(1.05);
+  }
+
+  .card-body {
+    padding: 1rem 1.1rem 1.2rem;
+  }
+  .card-tags {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: rgba(148, 163, 184, 0.95);
+  background: rgba(15, 23, 42, 0.85);
+}
+
+
+  @media (max-width: 768px) {
+    .card-image-wrap {
+      aspect-ratio: 4 / 3;     /* на мобильных более «квадратные» превью */
+    }
+  }
+</style>

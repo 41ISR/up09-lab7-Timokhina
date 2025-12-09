@@ -1,108 +1,48 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import CardImgUp from '../../components/card_img_up.astro';
-import CardImgRight from '../../components/card_img_right.astro';
-import CardBlog from '../../components/card_blog.astro';
+import Layout from "../../layouts/Layout.astro";
+import Card from "../../components/card.astro";
+import type { Article } from "../../content/article";
 
-import data from '../../../public/data.json';
+const res = await fetch("http://127.0.0.1:8000/api/articles/");
+const articles: Article[] = await res.json();
 ---
 
-<Layout>
-    <h1 class="head_title">The Blog</h1>
-	<div class="recent">
-        <CardImgUp img="/images/check.jpg" img_alt="img tag" href="/" post_cl="post1" tags={["weekend", "rest"]}>
-            <Fragment slot="header">New post</Fragment>
-            <Fragment slot="text">stay close to the storm</Fragment>
-            <Fragment slot="date">13-05-2025</Fragment>
-        </CardImgUp>
+<Layout title="Блог">
+  <main class="blog-page">
+    <h1 class="head_title">THE BLOG</h1>
 
-        <CardImgRight img="/images/check2.jpg" img_alt="img tag" post_cl="post2" tags={["study"]} href=''>
-            <span slot="header">Story</span>
-            <span slot="text">focused on my studies</span>
-        </CardImgRight>
-
-        <CardImgRight img="/images/check4.jpg" post_cl="post3" tags={["god", "jesus"]} href='' img_alt=''>
-            <Fragment slot="header">Jesus</Fragment>
-            <Fragment slot="text">† Jesus will help you †</Fragment>
-            <Fragment slot="date">01-01-1</Fragment>
-        </CardImgRight>
-
-        <CardImgRight img="/images/check3.jpg" post_cl="post4" tags={["default"]} href='' img_alt=''>
-            
-        </CardImgRight>
-    </div>
-
-    <div class="blog">
-        {data.articles.map(post => (
-            <CardBlog href='#' post_cl='' tags={post.tags} author={post.author}>
-                <Fragment slot="header">{post.title}</Fragment>
-                <Fragment slot="text">{post.desc}</Fragment>
-                <Fragment slot="date">{post.date}</Fragment>
-                <Fragment slot="author">{post.author}</Fragment>
-            </CardBlog>
-        ))}
-    </div>
+    <section class="blog">
+      {articles.map((article: Article) => (
+        <Card article={article} />
+      ))}
+    </section>
+  </main>
 </Layout>
 
 <style>
-    .head_title{
-        font-size: 5rem;
-        color: var(--accent-color);
-        padding-left: 3rem;
-        animation-name: anim1;
-        animation-duration: 2s;
-        animation-fill-mode: backwards;
-        
+  .blog-page {
+    width: min(760px, 100% - 3rem);
+    margin: 3rem auto 4rem;
+  }
+
+  .head_title {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    color: var(--accent-color);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .blog {
+    display: grid;
+    grid-template-columns: 1fr; /* одна колонка */
+    gap: 1.75rem;               /* расстояние между карточками */
+  }
+
+  @media (max-width: 768px) {
+    .blog-page {
+      width: min(100% - 2rem, 720px);
+      margin-top: 2rem;
     }
-
-    @keyframes anim1{
-        from{
-            opacity: 0;
-            padding-left: 0;
-            color: white;
-        }
-        to{
-            color: var(--accent-color);
-            opacity: 1;
-            padding-left: 3rem;
-        }
-    }
-
-    .recent{
-        margin: 15px 0;
-        display: grid;
-        grid-template-areas: 
-        "post1 post2"
-        "post1 post3"
-        "post1 post4";
-        grid-template-columns: 1.7fr 1fr;
-        grid-template-rows: repeat(3, 1fr);
-        gap: 15px 15px;
-        align-items: center;
-
-        margin: 2rem 0 4rem;
-
-        .post1{
-            grid-area: post1;
-        }
-        .post2{
-            grid-area: post2;
-        }
-        .post3{
-            grid-area: post3;
-        }
-        .post4{
-            grid-area: post4;
-        }
-    }
-
-    .blog{
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 36rem);
-        gap: 2rem 2rem;
-        justify-content: center;
-
-        margin-bottom: 3rem;
-
-    }
+  }
 </style>
